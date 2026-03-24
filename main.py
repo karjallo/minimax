@@ -1,5 +1,5 @@
 from re import randint
-import funciones
+from funciones import presentacion, configuracion, crear_tablero, imprimir_juego, estado_juego, minimax, game_over
 
 # declaramos variables iniciales
 turno = 1
@@ -35,8 +35,8 @@ while posicion_raton == posicion_gato:
 # inicializamos estas variables, que representan la posicion anterior del gato y raton
 # que utilizaremos mas adelante para facilitar la impresion del tablero y por si querramos definir
 # algun empate o condicion de ganar en cuando cumplan x movimientos iguales, como en ajedrez
-prepos_gato = [posicion_gato]
-prepos_raton = [posicion_raton]
+prepos_gato = posicion_gato
+prepos_raton = posicion_raton
 
 
 # necesitamos hacer algun tipo de loop, para que los movimientos vayan variando

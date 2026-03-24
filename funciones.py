@@ -77,4 +77,29 @@ def imprimir_juego(tablero):
         # utilizamos un print solo para imprimir una nueva linea y las ultimas paredes al terminar cada fila
         print("|")
 
+# funcion de posibles movimientos, aca deberiamos agregar en caso de agregar obstaculos
+def posibles_movimientos(posicion_actual, dimension_x, dimension_y):
+    movimientos = []
+    
+    # agregamos posibles movimientos si son mayores a 0 y menores a la dimension correspindiente definida por la matriz
+    # comprobamos si en el eje x se puede mover a la derecha
+    if posicion_actual[0] + 1 <= dimension_x:
+        nueva_posicion = [posicion_actual[0] + 1, posicion_actual[1]]
+        movimientos.append(nueva_posicion)
+    # comprobamos si en el eje x se puede mover para la izquierda
+    if posicion_actual[0] - 1 >= 0:
+        nueva_posicion = [posicion_actual[0] - 1, posicion_actual[1]]
+        movimientos.append(nueva_posicion)
+    # comprobamos si en el eje y se puede mover para abajo
+    if posicion_actual[1] + 1 <= dimension_y:
+        nueva_posicion = [posicion_actual[0], posicion_actual[1] + 1]
+        movimientos.append(nueva_posicion)
+    # comprobamos si en el eje y se puede mover para arriba
+    if posicion_actual[1] - 1 >= 0:
+        nueva_posicion = [posicion_actual[0], posicion_actual[1] - 1]
+        movimientos.append(nueva_posicion)
+    
+    # hacemos return de una lista de listas, que contienen los posibles movimientos en la matriz
+    return movimientos
 
+# def minimax(posicion_gato, posicion_raton):
