@@ -103,4 +103,7 @@ def posibles_movimientos(posicion_actual, dimension_x, dimension_y):
     # hacemos return de una lista de listas, que contienen los posibles movimientos en la matriz
     return movimientos
 
-# def minimax(posicion_gato, posicion_raton):
+def distancia_manhattan(pos_gato, pos_raton):
+    dif_x = abs(pos_gato[0] - pos_raton[0])
+    dif_y = abs(pos_gato[1] - pos_raton[1])
+    return dif_x + dif_y
