@@ -1,5 +1,8 @@
 from re import randint
 from funciones import presentacion, configuracion, crear_tablero, imprimir_juego, estado_juego, minimax, game_over
+from minimax import minimax
+
+
 
 # declaramos variables iniciales
 turno = 1
@@ -17,6 +20,7 @@ dimension_x = parametros[0]
 dimension_y = parametros[1]
 jugador = parametros[2]
 turno_win_raton = parametros[3]
+profundidad = parametros[4]
 
 # necesitamos crear un tablero, con las dimensiones definidas del usuario
 tablero = crear_tablero(dimension_x, dimension_y)
@@ -54,15 +58,17 @@ while estado_juego(posicion_gato, posicion_raton, turno_raton, turno_win_raton) 
     # es del gato o del raton e caso de como debe correr, siendo min o max
     # puedo implementar algun tipo de contador para variar los turnos
     if turno % 2 > 0:
-        # turno 1
-        minimax()
+        # turno 1 siempre sera para raton
+        turno_raton = turno_raton + 1
+        mejor_movimiento = minimax(tablero, profundidad, True)
+        mover(mejor_movimiento, posicion_raton)
         turno = turno + 1
         imprimir_juego(tablero)
     else:
-        # turno 2
-        # si es oc
-        minimax()
+        # turno 2 y turnos pares sera turno del gato
+        mejor_movimiento = minimax(tablero, profundidad, False)
         turno = turno + 1
+
         imprimir_juego(tablero)
 
 # realizamos la comprobacion de quien gano, y creamos la variable ganador para posteriormente poder imprimir el mensaje final
