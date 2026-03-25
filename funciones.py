@@ -17,8 +17,9 @@ def configuracion():
     while jugador != "g" or jugador != "r":
         jugador = input("Quien sos? Para Therian Gato escribe G, para Therian Raton escribe R").lower()
     turno_raton_win = int(input("Cuantos turnos tiene el raton para que pueda ganar?"))
+    profundidad = int(input("Cual sera la profundidad a aplicarse en el algoritmo minimax?"))
     
-    return [dimension_x, dimension_y, jugador, turno_raton_win]
+    return [dimension_x, dimension_y, jugador, turno_raton_win, profundidad]
 
 def crear_tablero(dimension_x, dimension_y):
     tablero = []
