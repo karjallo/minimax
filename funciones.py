@@ -11,13 +11,13 @@ def presentacion():
 # solicitamos la configuracion del usuario, realizar comprobaciones de que los datos sean correctos
 # sera necesario mas adelante crear restricciones de las dimensiones del tablero
 def configuracion():
-    dimension_x = int(input("Cual es la dimension en X del laberinto?"))
-    dimension_y = int(input("Cual es la dimension en Y del laberinto?"))
+    dimension_x = int(input("Cual es la dimension en X del laberinto?: "))
+    dimension_y = int(input("Cual es la dimension en Y del laberinto?: "))
     jugador = " "
-    while jugador != "g" or jugador != "r":
-        jugador = input("Quien sos? Para Therian Gato escribe G, para Therian Raton escribe R").lower()
-    turno_raton_win = int(input("Cuantos turnos tiene el raton para que pueda ganar?"))
-    profundidad = int(input("Cual sera la profundidad a aplicarse en el algoritmo minimax?"))
+    while jugador != "g" and jugador != "r":
+        jugador = input("Quien sos? Para Therian Gato escribe G, para Therian Raton escribe R: ").lower()
+    turno_raton_win = int(input("Cuantos turnos tiene el raton para que pueda ganar?: "))
+    profundidad = int(input("Cual sera la profundidad a aplicarse en el algoritmo minimax?: "))
     
     return [dimension_x, dimension_y, jugador, turno_raton_win, profundidad]
 
@@ -84,7 +84,7 @@ def posibles_movimientos(posicion_actual, dimension_x, dimension_y):
     
     # agregamos posibles movimientos si son mayores a 0 y menores a la dimension correspindiente definida por la matriz
     # comprobamos si en el eje x se puede mover a la derecha
-    if posicion_actual[0] + 1 <= dimension_x:
+    if posicion_actual[0] + 1 < dimension_x:
         nueva_posicion = [posicion_actual[0] + 1, posicion_actual[1]]
         movimientos.append(nueva_posicion)
     # comprobamos si en el eje x se puede mover para la izquierda
@@ -92,7 +92,7 @@ def posibles_movimientos(posicion_actual, dimension_x, dimension_y):
         nueva_posicion = [posicion_actual[0] - 1, posicion_actual[1]]
         movimientos.append(nueva_posicion)
     # comprobamos si en el eje y se puede mover para abajo
-    if posicion_actual[1] + 1 <= dimension_y:
+    if posicion_actual[1] + 1 < dimension_y:
         nueva_posicion = [posicion_actual[0], posicion_actual[1] + 1]
         movimientos.append(nueva_posicion)
     # comprobamos si en el eje y se puede mover para arriba
@@ -107,3 +107,29 @@ def distancia_manhattan(pos_gato, pos_raton):
     dif_x = abs(pos_gato[0] - pos_raton[0])
     dif_y = abs(pos_gato[1] - pos_raton[1])
     return dif_x + dif_y
+
+def mover(tablero, mejor_movimiento, es_raton):
+    pos_gato, pos_raton = hallar_posicion(tablero)
+
+    # si es raton, coloca en el tabler el valor 2
+    # e iguala a 0 la posicion anterior
+    if es_raton:
+        tablero[mejor_movimiento[0]][mejor_movimiento[1]] = 2
+        tablero[pos_raton[0]][pos_raton[1]] = 0
+    else:
+        tablero[mejor_movimiento[0]][mejor_movimiento[1]] = 1
+        tablero[pos_gato[0]][pos_gato[1]] = 0
+
+    return tablero
+    
+
+def hallar_posicion(tablero):
+    
+    for filas in tablero:
+        for columna in filas:
+            if columna == 1:
+                pos_gato = [filas, columna]
+            if columna == 2:
+                pos_raton = [filas, columna]
+    
+    return pos_gato, pos_raton
