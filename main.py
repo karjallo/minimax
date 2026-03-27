@@ -56,7 +56,7 @@ tablero[posicion_raton[0]][posicion_raton[1]] = 2
 
 # antes del loop, imprimir el juego con las posiciones iniciales
 # posteriormente se imprimira al finalizar el turno de cada jugador
-imprimir_juego(tablero)
+
 #LOOP
 # Aca debe de ejecutarse el algoritmo minmax, intercalando turnos, realizando una verificacion
 # para comprobar el estado del juego
@@ -64,65 +64,53 @@ while estado_juego(posicion_gato, posicion_raton, turno_raton, turno_win_raton) 
     # debe haber condicionales para saber si es el turno del jugador o de la pc y si
     # es del gato o del raton e caso de como debe correr, siendo min o max
     # puedo implementar algun tipo de contador para variar los turnos
-
     prepos_gato = posicion_gato
     prepos_raton = posicion_raton
-
     if turno % 2 > 0:
-        # turno 1 siempre sera para raton
+        if jugador == "r":
+            # pedir input a usuario
 
-        # descomentar para continuar despues de las pruebas
-        # turno_raton = turno_raton + 1
-        # mejor_movimiento = minimax(tablero, profundidad, True)
-        # mover(tablero, mejor_movimiento, True)
-
-  
-
-        # hallamos nueva posicion del raton
-        posicion_raton = sample(posibles_movimientos(posicion_raton, dimension_x, dimension_y), 1)[0]
-        # debug
-        print(f"nueva posicion del gato hallada de forma aleatoria, {posicion_gato}")
-
-        # colocamos la posicion en el tablero
-        tablero[posicion_raton[0]][posicion_raton[1]] = 2
-        # borramos la posicion anterior
-        tablero[prepos_raton[0]][prepos_raton[1]] = 0
-
-        turno = turno + 1
-        print(f"turno: {turno}")
-        print()
-        imprimir_juego(tablero)
+        else:
+            # turno 1 siempre sera para raton
+            turno_raton = turno_raton + 1
+            mejor_movimiento = minimax(tablero, profundidad, True)
+            posicion_raton = mejor_movimiento[0]
+            # colocamos la posicion en el tablero
+            tablero[posicion_gato[0]][posicion_gato[1]] = 1
+            # borramos la posicion anterior
+            tablero[prepos_gato[0]][prepos_gato[1]] = 0
+            # colocamos la posicion en el tablero
+            tablero[posicion_raton[0]][posicion_raton[1]] = 2
+            # borramos la posicion anterior
+            tablero[prepos_raton[0]][prepos_raton[1]] = 0
+            turno = turno + 1
+            turno_raton = turno_raton + 1
+            print(f"turno: {turno}")
+            print()
+            imprimir_juego(tablero)
 
     else:
-
-
-        # descomentar para continuar despues de las pruebas
-        # turno 2 y turnos pares sera turno del gato
-        # mejor_movimiento = minimax(tablero, profundidad, False)
-        # mover(tablero, mejor_movimiento, False)
-
-        # hallamos nueva posicion del raton
-        posicion_gato = sample(posibles_movimientos(posicion_gato, dimension_x, dimension_y), 1)[0]
-        # debug
-        print(f"nueva posicion del gato hallada de forma aleatoria, {posicion_gato}")
-
-
-        # colocamos la posicion en el tablero
-        tablero[posicion_gato[0]][posicion_gato[1]] = 1
-        # borramos la posicion anterior
-        tablero[prepos_gato[0]][prepos_gato[1]] = 0
-
-        turno = turno + 1
-
-        print(f"turno: {turno}")
-        print()
-        imprimir_juego(tablero)
+        if jugador == "g":
+            #pedir input al usuario
+            
+        else:
+            # turno 2 y turnos pares sera turno del gato
+            mejor_movimiento = minimax(tablero, profundidad, False)
+            posicion_gato = [mejor_movimiento[0]]
+            # colocamos la posicion en el tablero
+            tablero[posicion_gato[0]][posicion_gato[1]] = 1
+            # borramos la posicion anterior
+            tablero[prepos_gato[0]][prepos_gato[1]] = 0
+            turno = turno + 1
+            print(f"turno: {turno}")
+            print()
+            imprimir_juego(tablero)
 
 
 # realizamos la comprobacion de quien gano, y creamos la variable ganador para posteriormente poder imprimir el mensaje final
-if estado_juego() == 1:
+if estado_juego(posicion_gato, posicion_raton, turno_raton, turno_win_raton) == 1:
     ganador = "g"
-elif estado_juego() == 2:
+elif estado_juego(posicion_gato, posicion_raton, turno_raton, turno_win_raton) == 2:
     ganador = "r"
 # solo debug
 else:
