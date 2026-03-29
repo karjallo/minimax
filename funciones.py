@@ -1,4 +1,5 @@
-# se define el mensaje inicial
+from random import randint
+
 def presentacion():
     print('''
     Te despiertas en medio de un extraño laboratorio subterráneo. Las paredes están cubiertas de códigos garabateados, pantallas parpadeantes y… queso. Mucho queso. Frente a ti,
@@ -8,46 +9,37 @@ def presentacion():
     ¿O el implacable therian gato? Tú, aprendiz de estratega, tienes que decidir cómo se juega esta historia."
     ''')
 
-# solicitamos la configuracion del usuario, realizar comprobaciones de que los datos sean correctos
-# sera necesario mas adelante crear restricciones de las dimensiones del tablero
-def configuracion():
-    dimension_x = int(input("Cual es la dimension en X del laberinto?: "))
-    dimension_y = int(input("Cual es la dimension en Y del laberinto?: "))
-    jugador = " "
-    while jugador != "g" and jugador != "r":
-        jugador = input("Quien sos? Para Therian Gato escribe G, para Therian Raton escribe R: ").lower()
-    turno_raton_win = int(input("Cuantos turnos tiene el raton para que pueda ganar?: "))
-    profundidad = int(input("Cual sera la profundidad a aplicarse en el algoritmo minimax?: "))
-    
-    return [dimension_x, dimension_y, jugador, turno_raton_win, profundidad]
-
-def crear_tablero(dimension_x, dimension_y):
+def crear_tablero(dimension):
     tablero = []
-    for y in range(dimension_y):
-        # inicializamos / vaciamos la nueva fila
+    for y in range(dimension):
         fila = []
-        # iteramos sobre cada columna de cada fila, seria elemento por elemento de la fila
-        for x in range(dimension_x):
+        for x in range(dimension):
             fila.append(0)
-        # tras crear la fila, agregamos al tablero la fila entera
         tablero.append(fila)
-    
-    return tablero
 
-# comprobar que el juego haya terminado, si gano el gato, return 1, si gano el raton return 2
-# en caso de que nadie haya ganado return 0
-def estado_juego(pos_gato, pos_raton, turno_raton, turno_win_raton):
-    if pos_gato == pos_raton:
-        return 1
-    elif turno_raton >= turno_win_raton:
+    posicion_gato = [randint(0,filas - 1), randint(0,columnas - 1)]
+    posicion_raton = [randint(0,filas - 1), randint(0,columnas - 1)]
+
+    while posicion_raton == posicion_gato:
+        posicion_raton = [randint(0, filas - 1), randint(0, columnas -1)]
+
+    tablero[posicion_raton[0]][posicion_raton[1]] = 1
+    tablero[posicion_gato[0]][posicion_gato[1]] = 2
+
+    
+    return tablero, posicion_gato, posicion_raton
+
+def estado_juego(posicion_gato, posicion_raton, turno, turno_win_raton):
+    if posicion_gato == posicion_raton:
         return 2
+    elif turno >= turno_win_raton*2:
+        return 1
     
     return 0
     
 
-# en caso de que el juego se haya terminado, mostrar el ganador
+
 def game_over(ganador, jugador):
-    # en caso de que el jugador haya ganado
     if jugador == ganador:
         print("Ganaste!")
         if ganador == "g":
@@ -55,7 +47,6 @@ def game_over(ganador, jugador):
         else:
             print("Has logrado huir del therian gato")
 
-    # en caso de que hayas perdido
     else:
         print("Perdiste!")
         if ganador == "g":
@@ -63,73 +54,104 @@ def game_over(ganador, jugador):
         else:
             print("El therian raton logro escapar")
 
-# generar la funcion que hace print en terminal del estado del juego
-def imprimir_juego(tablero):
+def imprimir_juego(tablero, turno):
+    print(f"turno: {turno}")
+    print()
     for filas in tablero:
 
         for columna in filas:
-            # utilizamos el parametro end, para evitar que se imprima una nueva linea por cada print
             if columna == 0:
                 print("|  ", end=" ")
             elif columna == 1:
                 print("| G", end=" ")
             else:
                 print("| R", end=" ")
-        # utilizamos un print solo para imprimir una nueva linea y las ultimas paredes al terminar cada fila
         print("|")
 
-# funcion de posibles movimientos, aca deberiamos agregar en caso de agregar obstaculos
-def posibles_movimientos(posicion_actual, dimension_x, dimension_y):
+def posibles_movimientos(posicion_actual, dimension, movimientos_posibles):
     movimientos = []
-    
-    # agregamos posibles movimientos si son mayores a 0 y menores a la dimension correspindiente definida por la matriz
-    # comprobamos si en el eje x se puede mover a la derecha
-    if posicion_actual[0] + 1 < dimension_x:
-        nueva_posicion = [posicion_actual[0] + 1, posicion_actual[1]]
-        movimientos.append(nueva_posicion)
-    # comprobamos si en el eje x se puede mover para la izquierda
-    if posicion_actual[0] - 1 >= 0:
-        nueva_posicion = [posicion_actual[0] - 1, posicion_actual[1]]
-        movimientos.append(nueva_posicion)
-    # comprobamos si en el eje y se puede mover para abajo
-    if posicion_actual[1] + 1 < dimension_y:
-        nueva_posicion = [posicion_actual[0], posicion_actual[1] + 1]
-        movimientos.append(nueva_posicion)
-    # comprobamos si en el eje y se puede mover para arriba
-    if posicion_actual[1] - 1 >= 0:
-        nueva_posicion = [posicion_actual[0], posicion_actual[1] - 1]
-        movimientos.append(nueva_posicion)
-    
-    # hacemos return de una lista de listas, que contienen los posibles movimientos en la matriz
+    for mov in movimientos_posibles:
+        fila = posicion_actual[0] + movimientos_posibles[0]
+        columna = posicion_actual[1] + movimientos_posibles[1]
+        if fila < dimension and fila >= 0 and columna < dimension and columna >= 0:
+            movimientos.append(mov)
+
     return movimientos
 
-def distancia_manhattan(pos_gato, pos_raton):
-    dif_x = abs(pos_gato[0] - pos_raton[0])
-    dif_y = abs(pos_gato[1] - pos_raton[1])
-    return dif_x + dif_y
 
-def mover(tablero, mejor_movimiento, es_raton):
-    pos_gato, pos_raton = hallar_posicion(tablero)
+def distancia_manhattan(posicion_gato, posicion_raton):
+    dif_filas = abs(posicion_gato[0] - posicion_raton[0])
+    dif_columnas = abs(posicion_gato[1] - posicion_raton[1])
+    return dif_filas + dif_columnas
+    
 
-    # si es raton, coloca en el tabler el valor 2
-    # e iguala a 0 la posicion anterior
-    if es_raton:
-        tablero[mejor_movimiento[0]][mejor_movimiento[1]] = 2
-        tablero[pos_raton[0]][pos_raton[1]] = 0
+def pedir_movimiento():
+    direccion = input("en que direccion deseas moverte? w, a, s, d?: ")
+    while direccion not in ["w", "a", "s", "d"]:
+        print("incorrecto, ingrese de nuevo")
+        direccion = input("en que direccion deseas moverte? w, a, s, d?: ")
+
+    if direccion == "w":
+        movimiento = [-1, 0]
+    elif direccion == "s":
+        movimiento = [1, 0]
+    elif direccion == "a":
+        movimiento = [0, -1]
+    elif direccion == "d":
+        movimiento = [0, 1]
+    
+    return movimiento
+
+def validar_movimiento(posicion_animal, movimiento_a_realizar, dimension):
+    i = posicion_animal[0] + movimiento_a_realizar[0]
+    j = posicion_animal[1] + movimiento_a_realizar[1]
+    if i < 0 or i >= dimension or j < 0 or j >= dimension:
+        return False
     else:
-        tablero[mejor_movimiento[0]][mejor_movimiento[1]] = 1
-        tablero[pos_gato[0]][pos_gato[1]] = 0
+        return True
+    
+def mover(posicion_animal, movimiento_a_realizar):
+    i = posicion_animal[0] + movimiento_a_realizar[0]
+    j = posicion_animal[1] + movimiento_a_realizar[1]
+    return [i, j]
 
+def actualizar_tablero(tablero, antigua_posicion, nueva_posicion, valor_a_modificar):
+    tablero[antigua_posicion[0]][antigua_posicion[1]] = 0
+    tablero[nueva_posicion[0]][nueva_posicion[1]] = valor_a_modificar
     return tablero
-    
 
-def hallar_posicion(tablero):
-    
-    for filas in tablero:
-        for columna in filas:
-            if columna == 1:
-                pos_gato = [filas, columna]
-            if columna == 2:
-                pos_raton = [filas, columna]
-    
-    return pos_gato, pos_raton
+def minimax(posicion_raton, posicion_gato, dimension, profundidad, es_maximizador):
+
+    distancia = distancia_manhattan(posicion_gato, posicion_raton)
+
+    if posicion_gato == posicion_raton:
+        puntaje = -1000
+    elif profundidad <= 0:
+        puntaje = 1000
+    else:
+        puntaje = distancia
+
+    if es_maximizador:
+        mejor_puntaje = float('-inf')
+        movimientos = posibles_movimientos(posicion_raton, len(tablero[0]), len(tablero))
+
+        for movimiento in movimientos:
+           #simular movimiento
+           #mover()
+           puntaje = minimax(tablero, profundidad + 1, False)
+           # deshacer_movimiento()
+           mejor_puntaje = max(puntaje, mejor_puntaje)
+        return mejor_puntaje
+
+   # si es el turno del gato (minimizador)
+    else:
+        mejor_puntaje = float('inf')
+        movimientos = posibles_movimientos(posicion_gato, len(tablero[0]), len(tablero))
+
+        for movimiento in movimientos:
+            #simular movimiento
+            #mover()
+            puntaje = minimax(tablero, profundidad + 1, True)
+            # deshacer_movimiento()
+            mejor_puntaje = min(puntaje, mejor_puntaje)
+        return mejor_puntaje
