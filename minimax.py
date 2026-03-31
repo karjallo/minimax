@@ -63,9 +63,6 @@ MOVS = [[0, 1], [0, -1], [-1, 0], [1, 0]]
 
 todas_las_celdas = [[i, j] for i in range(DIMENSION) for j in range(DIMENSION)]
 raton, gato = sample(todas_las_celdas, 2)
-# si la distancia es par, el gato siempre gana
-# while distancia_manhattan(raton, gato) % 2 != 0:
-#     raton, gato = sample(todas_las_celdas, 2)
 turno = 1
 
 
