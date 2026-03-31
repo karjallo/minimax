@@ -4,7 +4,7 @@ from time import sleep
 
 def minimax(raton, gato, profundidad, es_maximizador):
     if raton == gato:
-        return -1000
+        return -100 - profundidad
     if profundidad == 0:
         return distancia_manhattan(raton, gato)
     
@@ -84,7 +84,10 @@ while turno <= MAX_TURNOS:
         elif val == mejor_val:
             mejores.append(mov)
     # entre los mejores, elige el más lejano al gato
-    raton = sample(mejores, 1)[0]
+    raton = mejores[0]
+    for mej in mejores:
+        if distancia_manhattan(mov, gato) > distancia_manhattan(raton, gato):
+            raton = mej
 
     print()
     print("mueve raton")
@@ -104,7 +107,11 @@ while turno <= MAX_TURNOS:
             mejores = [mov]
         elif val == mejor_val:
             mejores.append(mov)
-    gato = sample(mejores, 1)[0]
+    # en la lista de mejores, elije la distancia mas corta
+    gato = mejores[0]
+    for mej in mejores:
+        if distancia_manhattan(mov, raton) < distancia_manhattan(gato, raton):
+            gato = mej
 
     print()
     print("mueve gato")
