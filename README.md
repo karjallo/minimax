@@ -1,9 +1,9 @@
-## minimax
+# minimax
 
 Un juego donde el gato persigue al raton y el raton intenta escapar del gato la mayor cantidad de turnos, si logra escapar por X turnos, gana el raton.
 Ambos agentes se mueven en cuatro direcciones en un tablero de 6x6 sin obstaculos
 
-# Que funciono, que fue un desastre y el mejor momento AJA!
+## Que funciono, que fue un desastre y el mejor momento AJA!
 
 Todo fue tomando forma desde el inicio, la creacion del tablero, la posicion inicial de los agentes y que uno persiga al otro.
 
