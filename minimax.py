@@ -1,5 +1,4 @@
 from random import sample
-from time import sleep
 
 
 def minimax(raton, gato, profundidad, es_maximizador):
@@ -13,7 +12,7 @@ def minimax(raton, gato, profundidad, es_maximizador):
         mejor_val = -float("inf")
         for mov in posibles_movimientos(raton):
             val = minimax(mov, gato, profundidad - 1, False)
-            mejor_val = max(mejor_val, val)
+            mejor_val = max(mejor_val, val) 
         return mejor_val
     # Turno gato
     else:
@@ -61,7 +60,10 @@ DIMENSION = 6
 PROFUNDIDAD = 10
 MOVS = [[0, 1], [0, -1], [-1, 0], [1, 0]]
 
-todas_las_celdas = [[i, j] for i in range(DIMENSION) for j in range(DIMENSION)]
+todas_las_celdas = []
+for i in range(DIMENSION):
+    for j in range(DIMENSION):
+        todas_las_celdas.append([i, j])
 raton, gato = sample(todas_las_celdas, 2)
 turno = 1
 
@@ -89,7 +91,7 @@ while turno <= MAX_TURNOS:
     print()
     print("mueve raton")
     imprimir_tablero(raton, gato)
-    sleep(0.2)
+
     if raton == gato:
         print("el Gato ha ganado")
         break
@@ -113,7 +115,7 @@ while turno <= MAX_TURNOS:
     print()
     print("mueve gato")
     imprimir_tablero(raton, gato)
-    sleep(0.2)
+    
     if raton == gato:
         print("el Gato ha ganado")
         break
