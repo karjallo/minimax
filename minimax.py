@@ -57,7 +57,7 @@ def imprimir_tablero(raton, gato):
 
 MAX_TURNOS = 20
 DIMENSION = 6
-PROFUNDIDAD = 10
+PROFUNDIDAD = 6
 MOVS = [[0, 1], [0, -1], [-1, 0], [1, 0]]
 
 todas_las_celdas = []
